@@ -15,3 +15,13 @@ docker-compose exec backend php yii user/create
 
 // Создать 100 тестового переводчиков
 docker-compose exec backend php yii translator/generate
+
+Готово:
+Тут фронт на Vue js с формой фильтрации
+http://localhost:20080/
+Тут админка с простым crud и формой фильтрации на php
+http://localhost:21080/
+
+Тесты:
+docker-compose exec backend php vendor/bin/codecept run common/tests/unit/services/TranslatorGeneratorServiceTest.php
+docker-compose exec backend php vendor/bin/codecept run common/tests/unit/services/UserServiceTest.php
