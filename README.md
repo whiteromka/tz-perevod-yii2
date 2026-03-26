@@ -1,60 +1,138 @@
-<p align="center">
-    <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
-    </a>
-    <h1 align="center">Yii 2 Advanced Project Template</h1>
-    <br>
-</p>
+# Yii 2 Perevod
 
-Yii 2 Advanced Project Template is a skeleton [Yii 2](https://www.yiiframework.com/) application best for
-developing complex Web applications with multiple tiers.
+Приложение для управления переводчиками на базе Yii 2 Advanced Project Template.
 
-The template includes three tiers: front end, back end, and console, each of which
-is a separate Yii application.
+## Описание
 
-The template is designed to work in a team development environment. It supports
-deploying the application in different environments.
+Проект включает в себя:
+- **Frontend** — пользовательский интерфейс с фильтрацией переводчиков (Vue.js)
+- **Backend** — админ-панель для CRUD операций (PHP)
+- **Console** — консольные команды для управления данными
 
-Documentation is at [docs/guide/README.md](docs/guide/README.md).
+## Быстрый старт
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![Total Downloads](https://img.shields.io/packagist/dt/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![build](https://github.com/yiisoft/yii2-app-advanced/workflows/build/badge.svg)](https://github.com/yiisoft/yii2-app-advanced/actions?query=workflow%3Abuild)
+### 1. Запуск Docker
 
-DIRECTORY STRUCTURE
--------------------
+```bash
+docker-compose up -d --build
+```
+
+### 2. Установка зависимостей
+
+```bash
+docker-compose exec backend composer install
+```
+
+Если будет ругаться на уязвимости в пакетах phpunit/phpunit:
+
+```bash
+composer config audit.ignore PKSA-z3gr-8qht-p93v
+```
+
+### 3. Миграция базы данных
+
+```bash
+docker-compose exec backend php yii migrate
+```
+
+### 4. Создание тестового пользователя
+
+```bash
+# Параметры: username='rom', email='rom@rom.ru', password='123'
+docker-compose exec backend php yii user/create
+```
+
+### 5. Генерация тестовых данных (100 переводчиков)
+
+```bash
+docker-compose exec backend php yii translator/generate
+```
+
+## Доступ к приложениям
+
+| Приложение | URL | Описание |
+|------------|-----|----------|
+| **Frontend** | http://localhost:20080/ | Список переводчиков с фильтрацией (Vue.js) |
+| **Backend** | http://localhost:21080/ | Админ-панель с CRUD (PHP) |
+
+## API
+
+Внешнее API для работы с переводчиками:
+
+| Метод | URL | Описание |
+|-------|-----|----------|
+| `GET` | `/api/external/translator/active` | Все активные переводчики |
+| `GET` | `/api/external/translator/{id}` | Переводчик по ID |
+| `GET` | `/api/external/translator/email/{email}` | Переводчик по email |
+| `GET` | `/api/external/translator/list` | Список с фильтрами и пагинацией |
+
+## Тесты
+
+### Запуск unit-тестов
+
+```bash
+# Тесты сервиса генерации переводчиков
+docker-compose exec backend php vendor/bin/codecept run common/tests/unit/services/TranslatorGeneratorServiceTest.php
+
+# Тесты сервиса пользователей
+docker-compose exec backend php vendor/bin/codecept run common/tests/unit/services/UserServiceTest.php
+```
+
+### Запуск всех тестов
+
+```bash
+docker-compose exec backend php vendor/bin/codecept run
+```
+
+## Структура проекта
 
 ```
-common
-    config/              contains shared configurations
-    mail/                contains view files for e-mails
-    models/              contains model classes used in both backend and frontend
-    tests/               contains tests for common classes    
-console
-    config/              contains console configurations
-    controllers/         contains console controllers (commands)
-    migrations/          contains database migrations
-    models/              contains console-specific model classes
-    runtime/             contains files generated during runtime
-backend
-    assets/              contains application assets such as JavaScript and CSS
-    config/              contains backend configurations
-    controllers/         contains Web controller classes
-    models/              contains backend-specific model classes
-    runtime/             contains files generated during runtime
-    tests/               contains tests for backend application    
-    views/               contains view files for the Web application
-    web/                 contains the entry script and Web resources
-frontend
-    assets/              contains application assets such as JavaScript and CSS
-    config/              contains frontend configurations
-    controllers/         contains Web controller classes
-    models/              contains frontend-specific model classes
-    runtime/             contains files generated during runtime
-    tests/               contains tests for frontend application
-    views/               contains view files for the Web application
-    web/                 contains the entry script and Web resources
-    widgets/             contains frontend widgets
-vendor/                  contains dependent 3rd-party packages
-environments/            contains environment-based overrides
+├── common/           # Общий код (модели, сервисы, репозитории)
+│   ├── config/       # Общие конфигурации
+│   ├── models/       # Модели данных
+│   ├── repositories/ # Репозитории для работы с БД
+│   ├── services/     # Бизнес-логика (сервисы)
+│   └── tests/        # Unit-тесты
+├── frontend/         # Frontend приложение
+│   ├── controllers/  # Контроллеры
+│   ├── views/        # Представления
+│   └── web/js/       # JavaScript (Vue.js)
+├── backend/          # Backend приложение (админка)
+│   ├── controllers/  # Контроллеры
+│   └── views/        # Представления
+├── console/          # Console приложение
+│   ├── controllers/  # Консольные команды
+│   └── migrations/   # Миграции БД
+└── environments/     # Конфигурации для сред (dev/prod)
 ```
+
+## Технологии
+
+- **Framework:** Yii 2.0+
+- **PHP:** 8.1+
+- **Database:** MySQL 8
+- **Frontend:** Vue.js 3, Bootstrap 5
+- **Testing:** Codeception, PHPUnit
+- **Containerization:** Docker, Docker Compose
+
+## Разработка
+
+### Консольные команды
+
+```bash
+# Создать пользователя
+docker-compose exec backend php yii user/create
+
+# Сгенерировать переводчиков
+docker-compose exec backend php yii translator/generate <count>
+```
+
+### База данных (Docker)
+
+| Параметр | Значение |
+|----------|----------|
+| Host | localhost:3306 |
+| Database | yii2advanced |
+| Username | yii2advanced |
+| Password | secret |
+| Root Password | verysecret |
