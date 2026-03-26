@@ -1,6 +1,10 @@
 # Yii 2 Perevod
 
 Приложение для управления переводчиками на базе Yii 2 Advanced Project Template.
+Php + vue + mysql
+![Фронтенд часть](./assets/front.png)
+![Бекенд часть](./assets/back.png)
+
 
 ## Описание
 
