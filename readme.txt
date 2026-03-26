@@ -12,3 +12,6 @@ docker-compose exec backend php yii migrate
 // Создать тестового пользователя для захода в админку
 // с параметрами: username = 'rom', email = 'rom@rom.ru', password = '123'
 docker-compose exec backend php yii user/create
+
+// Создать 100 тестового переводчиков
+docker-compose exec backend php yii translator/generate

@@ -53,6 +53,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'translator' => 'translator/index',
+                'api/translator/list' => 'api-translator/list',
             ],
         ],
 

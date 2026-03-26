@@ -1,0 +1,15 @@
+/* Стили для ошибок валидации Yii2 + Bootstrap 5 */
+.has-error .form-control,
+.has-error .form-select {
+    border-color: #dc3545;
+}
+
+.has-error .help-block {
+    color: #dc3545;
+    font-size: 0.875em;
+    margin-top: 0.25rem;
+}
+
+.has-error .control-label {
+    color: #dc3545;
+}
