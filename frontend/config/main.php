@@ -53,8 +53,14 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '' => 'translator/index',
                 'translator' => 'translator/index',
                 'api/translator/list' => 'api-translator/list',
+
+                // Внешнее API для переводчиков
+                'api/external/translator/active' => 'api-external-translator/active',
+                'api/external/translator/id/<id:\d+>' => 'api-external-translator/by-id',
+                'api/external/translator/email/<email:.+>' => 'api-external-translator/by-email'
             ],
         ],
 

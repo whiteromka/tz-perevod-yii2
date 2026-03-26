@@ -4,6 +4,8 @@ namespace common\repositories;
 
 use common\models\Translator;
 use yii\db\Exception;
+use yii\db\ActiveQuery;
+use yii\data\ActiveDataProvider;
 
 /**
  * Репозиторий для работы с переводчиками в БД
@@ -40,5 +42,49 @@ class TranslatorRepository
         )->execute();
 
         return count($data);
+    }
+
+    /**
+     * Получить переводчика по ID
+     *
+     * @param int $id
+     * @return Translator|null
+     */
+    public function getById(int $id): ?Translator
+    {
+        return Translator::findOne($id);
+    }
+
+    /**
+     * Получить переводчика по email
+     *
+     * @param string $email
+     * @return Translator|null
+     */
+    public function getByEmail(string $email): ?Translator
+    {
+        return Translator::findOne(['email' => $email]);
+    }
+
+    /**
+     * Получить всех активных переводчиков
+     *
+     * @return Translator[]
+     */
+    public function getAllActive(): array
+    {
+        return Translator::find()
+            ->where(['status' => Translator::STATUS_ACTIVE])
+            ->all();
+    }
+
+    /**
+     * Получить базовый запрос для выборки переводчиков
+     *
+     * @return ActiveQuery
+     */
+    public function getQuery(): ActiveQuery
+    {
+        return Translator::find();
     }
 }

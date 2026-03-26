@@ -39,7 +39,7 @@ class TranslatorSearch extends Translator
     public function search(array $params): ActiveDataProvider
     {
         $query = Translator::find();
-        $this->loadParams($params);
+        $this->load($params);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -48,7 +48,7 @@ class TranslatorSearch extends Translator
             ],
             'sort' => ['defaultOrder' => ['id' => SORT_DESC]],
         ]);
-        
+
         if (!$this->validate()) {
             $query->where('0=1');
             return $dataProvider;
@@ -56,22 +56,6 @@ class TranslatorSearch extends Translator
         $this->filtering($query);
 
         return $dataProvider;
-    }
-
-    /**
-     * Загрузит данные в поисковую модель
-     *
-     * @param array $params
-     * @return void
-     */
-    private function loadParams(array $params): void
-    {
-        $formName = $this->formName();
-        if (isset($params[$formName]) && is_array($params[$formName])) { // это для бекенда
-            $this->load($params); // это для фронта
-        } else {
-            $this->load($params, '');
-        }
     }
 
     /**

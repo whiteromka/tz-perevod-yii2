@@ -52,6 +52,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '' => 'translator/index',
                 'translator' => 'translator/index',
                 'translator/<id:\d+>' => 'translator/view',
                 'translator/create' => 'translator/create',

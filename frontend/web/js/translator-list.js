@@ -76,18 +76,20 @@ createApp({
             this.loading = true;
 
             try {
-                // Формируем параметры запроса и фильты
+                // Формируем параметры запроса
                 const params = new URLSearchParams();
                 params.set('page', this.pagination.page);
                 params.set('per-page', this.pagination['per-page']);
+
+                // Оборачиваем фильтры в ключ модели TranslatorSearch
                 const f = this.filters;
-                if (f.name) params.set('name', f.name);
-                if (f.last_name) params.set('last_name', f.last_name);
-                if (f.status) params.set('status', f.status);
-                if (f.email) params.set('email', f.email);
-                if (f.price_from) params.set('price_from', f.price_from);
-                if (f.price_to) params.set('price_to', f.price_to);
-                if (f.works_mode) params.set('works_mode', f.works_mode);
+                if (f.name) params.set('TranslatorSearch[name]', f.name);
+                if (f.last_name) params.set('TranslatorSearch[last_name]', f.last_name);
+                if (f.status) params.set('TranslatorSearch[status]', f.status);
+                if (f.email) params.set('TranslatorSearch[email]', f.email);
+                if (f.price_from) params.set('TranslatorSearch[price_from]', f.price_from);
+                if (f.price_to) params.set('TranslatorSearch[price_to]', f.price_to);
+                if (f.works_mode) params.set('TranslatorSearch[works_mode]', f.works_mode);
 
                 const response = await fetch(`${this.apiUrl}?${params.toString()}`);
                 if (!response.ok) {

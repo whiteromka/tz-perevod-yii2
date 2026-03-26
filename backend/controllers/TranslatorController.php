@@ -3,19 +3,33 @@
 namespace backend\controllers;
 
 use common\models\Translator;
-use common\models\TranslatorSearch;
+use common\services\TranslatorService;
 use Yii;
+use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
+use yii\web\Response;
 
 /**
  * Контроллер для управления переводчиками
  */
 class TranslatorController extends Controller
 {
+    /** @var TranslatorService */
+    private TranslatorService $translatorService;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function init()
+    {
+        parent::init();
+        $this->translatorService = Yii::$container->get(TranslatorService::class);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -48,14 +62,12 @@ class TranslatorController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new TranslatorSearch();
         $params = Yii::$app->request->queryParams;
-
-        $dataProvider = $searchModel->search($params);
+        $result = $this->translatorService->getSearchModel($params);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'searchModel' => $result['searchModel'],
+            'dataProvider' => $result['dataProvider'],
         ]);
     }
 
@@ -69,7 +81,7 @@ class TranslatorController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->translatorService->getById($id),
         ]);
     }
 
@@ -95,7 +107,7 @@ class TranslatorController extends Controller
      * Редактирование переводчика
      *
      * @param int $id
-     * @return string|\yii\web\Response
+     * @return string|Response
      * @throws NotFoundHttpException
      * @throws ForbiddenHttpException
      */
@@ -118,29 +130,13 @@ class TranslatorController extends Controller
      * Удаление переводчика
      *
      * @param int $id
-     * @return \yii\web\Response
+     * @return Response
      * @throws NotFoundHttpException
+     * @throws Exception
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $this->translatorService->delete($id);
         return $this->redirect(['index']);
-    }
-
-    /**
-     * Поиск модели переводчика по ID
-     *
-     * @param int $id
-     * @return Translator
-     * @throws NotFoundHttpException
-     */
-    protected function findModel($id)
-    {
-        if (($model = Translator::findOne($id)) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException('Запрошенная страница не найдена.');
     }
 }
