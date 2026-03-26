@@ -8,10 +8,21 @@ $params = array_merge(
 );
 
 return [
+    'language' => 'ru',
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'modules' => [
+        'debug' => [
+            'class' => \yii\debug\Module::class,
+            'allowedIPs' => ['127.0.0.1', '::1', '*'],
+        ],
+        'gii' => [
+            'class' => \yii\gii\Module::class,
+            'allowedIPs' => ['127.0.0.1', '::1', '*'],
+        ],
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',

@@ -8,11 +8,21 @@ $params = array_merge(
 );
 
 return [
+    'language' => 'ru',
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
+    'modules' => [
+        'debug' => [
+            'class' => \yii\debug\Module::class,
+            'allowedIPs' => ['127.0.0.1', '::1', '*'],
+        ],
+        'gii' => [
+            'class' => \yii\gii\Module::class,
+            'allowedIPs' => ['127.0.0.1', '::1', '*'],
+        ],
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
@@ -38,14 +48,12 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
     ],
     'params' => $params,
 ];
