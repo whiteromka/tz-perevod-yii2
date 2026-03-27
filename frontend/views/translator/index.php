@@ -126,4 +126,4 @@ $this->title = 'Переводчики';
 
 <!-- Подключение Vue.js -->
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-<script src="<?= Url::to('@web/js/translator-list.js') ?>"></script>
+<script src="<?= Url::to('@web/js/translator-list.js?v=' . time()) ?>"></script>

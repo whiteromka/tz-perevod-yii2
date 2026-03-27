@@ -54,10 +54,10 @@ return [
             'rules' => [
                 '' => 'translator/index',
                 'translator' => 'translator/index',
-                'translator/<id:\d+>' => 'translator/view',
+                'translator/view/<id:\d+>' => 'translator/view',
                 'translator/create' => 'translator/create',
-                'translator/<id:\d+>/update' => 'translator/update',
-                'translator/<id:\d+>/delete' => 'translator/delete',
+                'translator/update/<id:\d+>' => 'translator/update',
+                'translator/delete/<id:\d+>' => 'translator/delete',
             ],
         ],
     ],

@@ -2,8 +2,8 @@
 
 Приложение для управления переводчиками на базе Yii 2 Advanced Project Template.
 Php + vue + mysql
-![Фронтенд часть](./assets/front.png)
-![Бекенд часть](./assets/back.png)
+![Фронтенд часть](./github/front.png)
+![Бекенд часть](./github/back.png)
 
 
 ## Описание

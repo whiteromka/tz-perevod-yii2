@@ -44,6 +44,17 @@ phpunit.phar
 /backend/web/index.php
 /backend/web/index-test.php
 /backend/web/robots.txt
+/api/web/index.php
+/api/web/index-test.php
+/api/web/robots.txt
+
+# runtime directories
+/frontend/runtime
+/frontend/web/assets
+/backend/runtime
+/backend/web/assets
+/api/runtime
+/api/web/assets
 
 # qwen
 /.qwen

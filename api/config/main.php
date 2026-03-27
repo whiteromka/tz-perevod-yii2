@@ -9,10 +9,10 @@ $params = array_merge(
 
 return [
     'language' => 'ru',
-    'id' => 'app-frontend',
+    'id' => 'app-api',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'controllerNamespace' => 'frontend\controllers',
+    'controllerNamespace' => 'api\controllers',
     'modules' => [
         'debug' => [
             'class' => \yii\debug\Module::class,
@@ -25,16 +25,18 @@ return [
     ],
     'components' => [
         'request' => [
-            'csrfParam' => '_csrf-frontend',
+            'csrfParam' => '_csrf-api',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ],
         ],
         'user' => [
             'identityClass' => 'common\models\User',
-            'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
+            'enableAutoLogin' => false,
+            'enableSession' => false,
         ],
         'session' => [
-            // this is the name of the session cookie used for login on the frontend
-            'name' => 'advanced-frontend',
+            'name' => 'advanced-api',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -48,16 +50,20 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                '' => 'translator/index',
-                'translator' => 'translator/index',
+                // API v1 маршруты
+                'v1/translators' => 'translator/list',
+                'v1/translators/active' => 'translator/active',
+                'v1/translators/<id:\d+>' => 'translator/by-id',
+                'v1/translators/by-email' => 'translator/by-email',
             ],
         ],
-
+        'response' => [
+            'format' => \yii\web\Response::FORMAT_JSON,
+        ],
     ],
     'params' => $params,
 ];

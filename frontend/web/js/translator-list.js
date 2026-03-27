@@ -31,7 +31,8 @@ createApp({
             },
 
             loading: false,
-            apiUrl: '/api/translator/list',
+            // API находится на отдельном порту 22080
+            apiUrl: 'http://localhost:22080/v1/translators',
         };
     },
 

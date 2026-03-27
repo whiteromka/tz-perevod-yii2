@@ -113,7 +113,7 @@ class TranslatorController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $model = $this->translatorService->getById($id);
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
