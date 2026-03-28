@@ -2,15 +2,15 @@
 
 namespace backend\controllers;
 
+use common\forms\backend\Translator\TranslatorForm;
 use common\models\Translator;
-use common\services\TranslatorService;
+use common\search\TranslatorSearch;
 use Yii;
 use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 
 /**
@@ -18,18 +18,6 @@ use yii\web\Response;
  */
 class TranslatorController extends Controller
 {
-    /** @var TranslatorService */
-    private TranslatorService $translatorService;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function init()
-    {
-        parent::init();
-        $this->translatorService = Yii::$container->get(TranslatorService::class);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -62,12 +50,12 @@ class TranslatorController extends Controller
      */
     public function actionIndex()
     {
-        $params = Yii::$app->request->queryParams;
-        $result = $this->translatorService->getSearchModel($params);
+        $searchModel = new TranslatorSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $result['searchModel'],
-            'dataProvider' => $result['dataProvider'],
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -81,7 +69,7 @@ class TranslatorController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->translatorService->getById($id),
+            'model' => $this->findModel($id),
         ]);
     }
 
@@ -90,16 +78,19 @@ class TranslatorController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Translator();
-
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+        $translatorForm = new TranslatorForm();
+        if ($translatorForm->load(Yii::$app->request->post()) && $translatorForm->validate()) {
+            $translator = new Translator();
+            $translator->setAttributes($translatorForm->attributesToArray());
+            if ($translator->save()) {
+                return $this->redirect(['view', 'id' => $translator->id]);
             }
+
+            Yii::$app->session->setFlash('error', 'Ошибка при создании переводчика');
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'translatorForm' => $translatorForm,
         ]);
     }
 
@@ -109,20 +100,24 @@ class TranslatorController extends Controller
      * @param int $id
      * @return string|Response
      * @throws NotFoundHttpException
-     * @throws ForbiddenHttpException
      */
     public function actionUpdate($id)
     {
-        $model = $this->translatorService->getById($id);
+        $translator = $this->findModel($id);
+        $translatorForm = new TranslatorForm();
+        $translatorForm->setAttributes($translator->getAttributes());
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+        if ($translatorForm->load(Yii::$app->request->post()) && $translatorForm->validate()) {
+            $translator->setAttributes($translatorForm->attributesToArray());
+            if ($translator->save()) {
+                return $this->redirect(['view', 'id' => $translator->id]);
             }
+
+            Yii::$app->session->setFlash('error', 'Ошибка при обновлении переводчика');
         }
 
         return $this->render('update', [
-            'model' => $model,
+            'translatorForm' => $translatorForm,
         ]);
     }
 
@@ -136,7 +131,23 @@ class TranslatorController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->translatorService->delete($id);
+        $this->findModel($id)->delete();
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Найти модель по ID
+     *
+     * @param int $id
+     * @return Translator
+     * @throws NotFoundHttpException
+     */
+    protected function findModel($id): Translator
+    {
+        $model = Translator::findOne($id);
+        if ($model === null) {
+            throw new NotFoundHttpException("Переводчик с ID {$id} не найден");
+        }
+        return $model;
     }
 }

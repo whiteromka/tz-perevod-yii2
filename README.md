@@ -43,13 +43,13 @@ docker-compose exec backend php yii migrate
 
 ```bash
 # Параметры: username='rom', email='rom@rom.ru', password='123'
-docker-compose exec backend php yii user/create
+docker-compose exec backend php yii user-generate/create rom rom@rom.ru 123
 ```
 
 ### 5. Генерация тестовых данных (100 переводчиков)
 
 ```bash
-docker-compose exec backend php yii translator/generate
+docker-compose exec backend php yii translator-generate/create 100
 ```
 
 ## Доступ к приложениям
@@ -77,9 +77,6 @@ docker-compose exec backend php yii translator/generate
 ```bash
 # Тесты сервиса генерации переводчиков
 docker-compose exec backend php vendor/bin/codecept run common/tests/unit/services/TranslatorGeneratorServiceTest.php
-
-# Тесты сервиса пользователей
-docker-compose exec backend php vendor/bin/codecept run common/tests/unit/services/UserServiceTest.php
 ```
 
 ### Запуск всех тестов
@@ -125,10 +122,10 @@ docker-compose exec backend php vendor/bin/codecept run
 
 ```bash
 # Создать пользователя
-docker-compose exec backend php yii user/create
+docker-compose exec backend php yii user-generate/create <username> <email> <password>
 
-# Сгенерировать переводчиков
-docker-compose exec backend php yii translator/generate <count>
+# Сгенерировать переводчиков (указать количество)
+docker-compose exec backend php yii translator-generate/create 100
 ```
 
 ### База данных (Docker)

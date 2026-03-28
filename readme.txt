@@ -22,10 +22,10 @@ docker-compose exec backend php yii migrate
 
 // Создать тестового пользователя для захода в админку
 // с параметрами: username = 'rom', email = 'rom@rom.ru', password = '123'
-docker-compose exec backend php yii user/create
+docker-compose exec backend php yii user-generate/create rom rom@rom.ru 123
 
-// Создать 100 тестового переводчиков
-docker-compose exec backend php yii translator/generate
+// Создать 100 тестовых переводчиков
+docker-compose exec backend php yii translator-generate/create 100
 
 Готово:
 Тут фронт на Vue js с формой фильтрации
@@ -35,4 +35,3 @@ http://localhost:21080/
 
 Тесты:
 docker-compose exec backend php vendor/bin/codecept run common/tests/unit/services/TranslatorGeneratorServiceTest.php
-docker-compose exec backend php vendor/bin/codecept run common/tests/unit/services/UserServiceTest.php

@@ -24,6 +24,16 @@ return [
         ],
     ],
     'components' => [
+        'cors' => [
+            'class' => \yii\filters\Cors::class,
+            'cors' => [
+                'Origin' => ['*'],
+                'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+                'Access-Control-Request-Headers' => ['*'],
+                'Access-Control-Allow-Credentials' => false,
+                'Access-Control-Max-Age' => 3600,
+            ],
+        ],
         'request' => [
             'csrfParam' => '_csrf-api',
             'parsers' => [

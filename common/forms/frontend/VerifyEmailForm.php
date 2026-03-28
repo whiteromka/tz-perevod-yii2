@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\models;
+namespace common\forms\frontend;
 
 use common\models\User;
 use yii\base\InvalidArgumentException;

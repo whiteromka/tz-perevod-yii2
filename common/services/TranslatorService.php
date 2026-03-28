@@ -3,7 +3,6 @@
 namespace common\services;
 
 use common\models\Translator;
-use common\models\TranslatorSearch;
 use common\repositories\TranslatorRepository;
 use yii\web\NotFoundHttpException;
 
@@ -70,106 +69,9 @@ class TranslatorService
         $total = count($items);
         $message = $total > 0 ? 'Список переводчиков готов' : 'Нет свободных переводчиков';
         return [
-            'messge' => $message,
+            'message' => $message,
             'items' => $items,
             'total' => $total
-        ];
-    }
-
-    /**
-     * Получить список переводчиков с фильтрами и пагинацией
-     *
-     * @param array $params
-     * @return array
-     */
-    public function getList(array $params): array
-    {
-        $searchModel = new TranslatorSearch();
-        $dataProvider = $searchModel->search($params);
-
-        return [
-            'items' => $dataProvider->getModels(),
-            'pagination' => [
-                'total' => $dataProvider->getTotalCount(),
-                'page' => $dataProvider->getPagination()->getPage() + 1,
-                'per-page' => $dataProvider->getPagination()->getPageSize(),
-                'page-count' => $dataProvider->getPagination()->getPageCount(),
-            ],
-            'filters' => [
-                'statusList' => Translator::getStatusList(),
-                'worksModeList' => Translator::getWorksModeList(),
-            ],
-        ];
-    }
-
-    /**
-     * Создать нового переводчика
-     *
-     * @param array $data
-     * @return Translator
-     * @throws \yii\db\Exception
-     */
-    public function create(array $data): Translator
-    {
-        $translator = new Translator();
-        $translator->setAttributes($data);
-        
-        if (!$translator->save()) {
-            throw new \yii\web\UnprocessableEntityHttpException('Ошибка при создании переводчика');
-        }
-        
-        return $translator;
-    }
-
-    /**
-     * Обновить данные переводчика
-     *
-     * @param int $id
-     * @param array $data
-     * @return Translator
-     * @throws NotFoundHttpException
-     * @throws \yii\db\Exception
-     */
-    public function update(int $id, array $data): Translator
-    {
-        $translator = $this->getById($id);
-        $translator->setAttributes($data);
-        
-        if (!$translator->save()) {
-            throw new \yii\web\UnprocessableEntityHttpException('Ошибка при обновлении переводчика');
-        }
-        
-        return $translator;
-    }
-
-    /**
-     * Удалить переводчика
-     *
-     * @param int $id
-     * @return bool
-     * @throws NotFoundHttpException
-     * @throws \yii\db\Exception
-     */
-    public function delete(int $id): bool
-    {
-        $translator = $this->getById($id);
-        return $translator->delete();
-    }
-
-    /**
-     * Получить поисковую модель с данными
-     *
-     * @param array $params
-     * @return array
-     */
-    public function getSearchModel(array $params): array
-    {
-        $searchModel = new TranslatorSearch();
-        $dataProvider = $searchModel->search($params);
-
-        return [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
         ];
     }
 }

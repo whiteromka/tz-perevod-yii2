@@ -2,6 +2,8 @@
 
 namespace common\models;
 
+use common\models\Enums\TranslatorStatus;
+use common\models\Enums\TranslatorWorksMode;
 use yii\db\ActiveRecord;
 
 /**
@@ -19,12 +21,6 @@ use yii\db\ActiveRecord;
  */
 class Translator extends ActiveRecord
 {
-    public const STATUS_ACTIVE = 'active';
-    public const STATUS_INACTIVE = 'inactive';
-
-    public const WORKS_MODE_WEEKDAYS = 'weekdays';  // будни
-    public const WORKS_MODE_DAILY = 'daily';        // ежедневно
-
     /**
      * {@inheritdoc}
      */
@@ -43,10 +39,10 @@ class Translator extends ActiveRecord
             [['price'], 'integer'],
             [['name', 'last_name', 'email', 'status', 'works_mode'], 'string', 'max' => 255],
             [['email'], 'email'],
-            [['status'], 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
-            [['works_mode'], 'in', 'range' => [self::WORKS_MODE_WEEKDAYS, self::WORKS_MODE_DAILY]],
-            [['status'], 'default', 'value' => self::STATUS_ACTIVE],
-            [['works_mode'], 'default', 'value' => self::WORKS_MODE_WEEKDAYS],
+            [['status'], 'in', 'range' => array_keys(TranslatorStatus::labels())],
+            [['works_mode'], 'in', 'range' => array_keys(TranslatorWorksMode::labels())],
+            [['status'], 'default', 'value' => TranslatorStatus::ACTIVE->value],
+            [['works_mode'], 'default', 'value' => TranslatorWorksMode::WEEKDAYS->value],
         ];
     }
 
@@ -72,26 +68,22 @@ class Translator extends ActiveRecord
      * Получить список статусов [en => ru]
      *
      * @return array
+     * @deprecated Используйте TranslatorStatus::labels()
      */
     public static function getStatusList(): array
     {
-        return [
-            self::STATUS_ACTIVE => 'Активен',
-            self::STATUS_INACTIVE => 'Неактивен',
-        ];
+        return TranslatorStatus::labels();
     }
 
     /**
      * Получить список режимов работы [en => ru]
      *
      * @return array
+     * @deprecated Используйте TranslatorWorksMode::labels()
      */
     public static function getWorksModeList(): array
     {
-        return [
-            self::WORKS_MODE_WEEKDAYS => 'Только будни',
-            self::WORKS_MODE_DAILY => 'Ежедневно',
-        ];
+        return TranslatorWorksMode::labels();
     }
 
     /**
@@ -101,7 +93,7 @@ class Translator extends ActiveRecord
      */
     public function getRuStatus(): string
     {
-        return self::getStatusList()[$this->status] ?? $this->status;
+        return TranslatorStatus::from($this->status)->label() ?? $this->status;
     }
 
     /**
@@ -111,6 +103,6 @@ class Translator extends ActiveRecord
      */
     public function getRuWorksMode(): string
     {
-        return self::getWorksModeList()[$this->works_mode] ?? $this->works_mode;
+        return TranslatorWorksMode::from($this->works_mode)->label() ?? $this->works_mode;
     }
 }

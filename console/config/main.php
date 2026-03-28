@@ -31,6 +31,12 @@ return [
                 ],
             ],
         ],
+        'translatorGenerator' => [
+            'class' => \common\services\TranslatorGeneratorService::class,
+            'dependencies' => [
+                \common\repositories\TranslatorRepository::class,
+            ],
+        ],
     ],
     'params' => $params,
 ];

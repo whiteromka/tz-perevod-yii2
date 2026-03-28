@@ -1,12 +1,13 @@
 <?php
 
-use common\models\Translator;
+use common\models\Enums\TranslatorStatus;
+use common\models\Enums\TranslatorWorksMode;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /**
  * @var yii\web\View $this
- * @var common\models\Translator $model
+ * @var common\forms\backend\Translator\TranslatorForm $translatorForm
  * @var ActiveForm $form
  */
 ?>
@@ -19,14 +20,14 @@ use yii\widgets\ActiveForm;
 
             <div class="row">
                 <div class="col-md-6">
-                    <?= $form->field($model, 'name', [
+                    <?= $form->field($translatorForm, 'name', [
                         'options' => ['class' => 'form-group mb-3'],
                         'inputOptions' => ['class' => 'form-control'],
                     ])->textInput(['maxlength' => true]) ?>
                 </div>
 
                 <div class="col-md-6">
-                    <?= $form->field($model, 'last_name', [
+                    <?= $form->field($translatorForm, 'last_name', [
                         'options' => ['class' => 'form-group mb-3'],
                         'inputOptions' => ['class' => 'form-control'],
                     ])->textInput(['maxlength' => true]) ?>
@@ -35,14 +36,14 @@ use yii\widgets\ActiveForm;
 
             <div class="row">
                 <div class="col-md-6">
-                    <?= $form->field($model, 'email', [
+                    <?= $form->field($translatorForm, 'email', [
                         'options' => ['class' => 'form-group mb-3'],
                         'inputOptions' => ['class' => 'form-control', 'type' => 'email'],
                     ])->textInput(['maxlength' => true]) ?>
                 </div>
 
                 <div class="col-md-6">
-                    <?= $form->field($model, 'price', [
+                    <?= $form->field($translatorForm, 'price', [
                         'options' => ['class' => 'form-group mb-3'],
                         'inputOptions' => ['class' => 'form-control', 'type' => 'number', 'min' => 0],
                     ])->textInput() ?>
@@ -51,21 +52,21 @@ use yii\widgets\ActiveForm;
 
             <div class="row">
                 <div class="col-md-6">
-                    <?= $form->field($model, 'status', [
+                    <?= $form->field($translatorForm, 'status', [
                         'options' => ['class' => 'form-group mb-3'],
                         'inputOptions' => ['class' => 'form-select'],
                     ])->dropDownList(
-                        Translator::getStatusList(),
+                        TranslatorStatus::labels(),
                         ['prompt' => 'Выберите статус']
                     ) ?>
                 </div>
 
                 <div class="col-md-6">
-                    <?= $form->field($model, 'works_mode', [
+                    <?= $form->field($translatorForm, 'works_mode', [
                         'options' => ['class' => 'form-group mb-3'],
                         'inputOptions' => ['class' => 'form-select'],
                     ])->dropDownList(
-                        Translator::getWorksModeList(),
+                        TranslatorWorksMode::labels(),
                         ['prompt' => 'Выберите режим работы']
                     ) ?>
                 </div>

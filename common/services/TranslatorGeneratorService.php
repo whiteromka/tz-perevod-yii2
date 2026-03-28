@@ -2,9 +2,10 @@
 
 namespace common\services;
 
+use common\models\Enums\TranslatorStatus;
+use common\models\Enums\TranslatorWorksMode;
 use common\repositories\TranslatorRepository;
-use common\models\Translator;
-use Yii;
+use yii\db\Exception;
 
 /**
  * Сервис для генерации тестовых переводчиков
@@ -27,7 +28,7 @@ class TranslatorGeneratorService
      *
      * @param int $count количество переводчиков
      * @return int количество созданных записей
-     * @throws \yii\db\Exception
+     * @throws Exception
      */
     public function generate(int $count): int
     {
@@ -98,7 +99,7 @@ class TranslatorGeneratorService
      */
     private function getRandomStatus(): string
     {
-        $statuses = [Translator::STATUS_ACTIVE, Translator::STATUS_INACTIVE];
+        $statuses = [TranslatorStatus::ACTIVE->value, TranslatorStatus::INACTIVE->value];
         return $statuses[array_rand($statuses)];
     }
 
@@ -109,7 +110,7 @@ class TranslatorGeneratorService
      */
     private function getRandomWorksMode(): string
     {
-        $modes = [Translator::WORKS_MODE_WEEKDAYS, Translator::WORKS_MODE_DAILY];
+        $modes = [TranslatorWorksMode::WEEKDAYS->value, TranslatorWorksMode::DAILY->value];
         return $modes[array_rand($modes)];
     }
 
@@ -121,8 +122,8 @@ class TranslatorGeneratorService
      */
     private function generateEmail(int $index): string
     {
-        $randomStr1 = Yii::$app->security->generateRandomString(6);
-        $randomStr2 = Yii::$app->security->generateRandomString(6);
+        $randomStr1 = \Yii::$app->security->generateRandomString(6);
+        $randomStr2 = \Yii::$app->security->generateRandomString(6);
         
         return strtolower("{$randomStr1}_{$randomStr2}_{$index}@example.com");
     }
@@ -131,7 +132,6 @@ class TranslatorGeneratorService
      * Получить случайную цену
      *
      * @return int
-     * @throws RandomException
      */
     private function getRandomPrice(): int
     {

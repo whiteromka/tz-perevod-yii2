@@ -2,9 +2,11 @@
 
 namespace api\controllers;
 
-use common\models\Translator;
-use common\models\TranslatorSearch;
+use common\models\Enums\TranslatorStatus;
+use common\models\Enums\TranslatorWorksMode;
+use common\search\TranslatorSearch;
 use common\services\TranslatorService;
+use yii\filters\Cors;
 use yii\rest\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -18,14 +20,29 @@ class TranslatorController extends Controller
     /**
      * {@inheritdoc}
      */
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        $behaviors['corsFilter'] = [
+            'class' => Cors::class,
+            'cors' => [
+                'Origin' => ['*'],
+                'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+                'Access-Control-Request-Headers' => ['*'],
+                'Access-Control-Allow-Credentials' => false,
+                'Access-Control-Max-Age' => 3600,
+            ],
+        ];
+        return $behaviors;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function init()
     {
         parent::init();
         Yii::$app->response->format = Response::FORMAT_JSON;
-        // CORS заголовки для API
-        Yii::$app->response->headers->add('Access-Control-Allow-Origin', '*');
-        Yii::$app->response->headers->add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-        Yii::$app->response->headers->add('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     }
 
     /**
@@ -49,8 +66,8 @@ class TranslatorController extends Controller
                 'page-count' => $dataProvider->getPagination()->getPageCount(),
             ],
             'filters' => [
-                'statusList' => Translator::getStatusList(),
-                'worksModeList' => Translator::getWorksModeList(),
+                'statusList' => TranslatorStatus::labels(),
+                'worksModeList' => TranslatorWorksMode::labels(),
             ],
         ];
     }

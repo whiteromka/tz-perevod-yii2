@@ -2,10 +2,9 @@
 
 namespace common\repositories;
 
+use common\models\Enums\TranslatorStatus;
 use common\models\Translator;
 use yii\db\Exception;
-use yii\db\ActiveQuery;
-use yii\data\ActiveDataProvider;
 
 /**
  * Репозиторий для работы с переводчиками в БД
@@ -74,17 +73,8 @@ class TranslatorRepository
     public function getAllActive(): array
     {
         return Translator::find()
-            ->where(['status' => Translator::STATUS_ACTIVE])
+            ->where(['status' => TranslatorStatus::ACTIVE->value])
             ->all();
     }
 
-    /**
-     * Получить базовый запрос для выборки переводчиков
-     *
-     * @return ActiveQuery
-     */
-    public function getQuery(): ActiveQuery
-    {
-        return Translator::find();
-    }
 }

@@ -1,7 +1,8 @@
 <?php
 
-namespace common\models;
+namespace common\search;
 
+use common\models\Translator;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
 

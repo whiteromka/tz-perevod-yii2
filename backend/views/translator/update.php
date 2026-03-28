@@ -1,19 +1,16 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
 
 /**
  * @var yii\web\View $this
- * @var common\models\Translator $model
+ * @var common\forms\backend\Translator\TranslatorForm $translatorForm
  */
 
-$this->title = 'Изменить переводчика: ' . $model->name . ' ' . $model->last_name;
+$this->title = 'Изменить переводчика: ' . $translatorForm->name . ' ' . $translatorForm->last_name;
 $this->params['breadcrumbs'][] = ['label' => 'Переводчики', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => $translatorForm->name, 'url' => ['view', 'id' => Yii::$app->request->get('id')]];
 $this->params['breadcrumbs'][] = 'Изменить';
-
-$form = ActiveForm::begin();
 ?>
 
 <div class="translator-update">
@@ -21,10 +18,7 @@ $form = ActiveForm::begin();
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
-        'model' => $model,
-        'form' => $form,
+        'translatorForm' => $translatorForm,
     ]) ?>
 
 </div>
-
-<?php ActiveForm::end(); ?>
